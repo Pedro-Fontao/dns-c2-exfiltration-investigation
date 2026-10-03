@@ -426,4 +426,12 @@ A DNS-only detection can produce false positives because many legitimate applica
 
 ## What I Learned
 
-<!-- Write this section yourself. -->
+-I learned how important baselining is before classifying activity as suspicious, having a baseline essentially is knowing what "normal" looks like, so when activity deviates from that baseline, an analyst can investigate and determine if any further steps need to be taken.
+
+-I learned how DNS can carry data, not just resolve domain names, which can be abused as a channel for data exfiltration where unauthorized data can be subtly leaked through what looks like standard queries. Some clues include unusually long DNS queries, unusual query structure, encoded-looking data, and abnormal frequency. Legitimate activity can still have all these present so the traffic should be investigated closely before making a conclusion. 
+
+-I learned how and why scoping suspicious behavior across the entire environment is essential to ensure no other compromised systems are missed. Identifying every affected system is essential for proper containment and remediation, because missing one compromised host can allow the threat to persist.
+
+-I learned how endpoint telemetry can explain network telemetry. Zeek showed repeated DNS requests, while endpoint telemetry showed "powershell.exe → nslookup.exe". Network telemetry captures what communication occurred, while endpoint telemetry reveals specifically which process initiated it.
+
+-I learned how to distinguish DNS beaconing and DNS exfiltration by looking at the behavior of the queries, not just the fact DNS was being used. Traffic volume and timing patterns matter. In the project, beaconing appeared as small repeated requests for the same domain at a regular interval, while the exfiltration-style activity used changing encoded data inside subdomains. In short, beaconing usually involves periodic check-ins or command-and-control communication, while DNS exfiltration uses DNS queries to transfer data out of a system.
